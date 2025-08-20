@@ -3,19 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <title>Todo List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <style>
-        table {
-          border-collapse: collapse;
-          width: 60%;
-          margin-top: 20px;
-        }
         th, td {
           border: 1px solid #333;
           padding: 8px;
-          text-align: left;
-        }
-        th {
-          background-color: #eee;
         }
     </style>
 </head>
@@ -34,44 +27,41 @@
     <input type="radio" th:field="*{completed}" value="true" id="completedTrue" />
     <label for="completedTrue">Completed</label><br />
     <input type="radio" th:field="*{completed}" value="false" id="completedFalse" checked />
-    <label for="completedFalse">Not Completed</label><br /><br />
+    <label for="completedFalse">Not Completed</label><br/><br/>
 
-    <button type="submit">Add Todo</button>
+    <button class="btn btn-dark" type="submit">Add Todo</button>
 </form>
 
 <h2>Todo List</h2>
 
-<form th:action="@{/todos/update-list}" method="post" th:object="${todos}">    <table>
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Completed</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="t, iterStat : ${todos}">
-            <td th:text="${t.title}"></td>
-            <td th:text="${t.description}"></td>
-            <td>
-            <form th:action="@{/todos/update/{id}(id=${t.id})}" method="post">
-                <input type="checkbox"
-                       th:name="completed"
-                       th:value="true"
-                       th:checked="${t.completed}"
-                       onchange="this.form.submit()" />
-                <input type="hidden" name="_method" value="put" />
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Completed</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t : ${todos}">
+        <td th:text="${t.title}"></td>
+        <td th:text="${t.description}"></td>
+        <td>
+            <form th:action="@{/todos/update/{id}(id=${t.id})}" method="post" style="display:inline;">
+                <input type="checkbox" name="completed" th:checked="${t.completed}" />
+                <input type="hidden" name="completed" th:value="${!t.completed}" />
+                <button type="submit" class="btn btn-sm btn-dark">Update</button>
             </form>
-            </td>
-            <td>
-                <form th:action="@{/todos/delete/{id}(id=${t.id})}" method="post" style="display:inline;">
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <button type="submit">Update Status</button>
-</form>
+        </td>
+        <td>
+            <form th:action="@{/todos/delete/{id}(id=${t.id})}" method="post" style="display: inline;">
+                <button class="btn btn-dark" type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
 </body>
 </html>

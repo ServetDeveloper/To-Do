@@ -34,7 +34,14 @@ public class TodoService {
     todoRepository.deleteById(id);
   }
 
-  public void save (Todo todo) {
-    todoRepository.save(todo);
+  public void updateTodo (Long id, Boolean completed) {
+
+    Todo existingTodo = todoRepository.findById(id)
+      .orElseThrow(() -> new IllegalArgumentException("Invalid todo id: " + id));
+
+    existingTodo.setCompleted(completed);
+
+    todoRepository.save(existingTodo);
+
   }
 }

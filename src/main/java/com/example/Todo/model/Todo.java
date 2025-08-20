@@ -21,12 +21,12 @@ public class Todo {
   private Long id;
 
   @NotBlank(message = "Title cannot be empty")
-  @Size(min = 5, max = 30, message = "Title should be between 5 and 30 characters")
+  @Size(min = 3, max = 20, message = "Title should be between 5 and 30 characters")
   private String title;
 
-  @Size(min = 20, max = 50, message = "Description should be between 20 and 50 characters")
+  @Size(min = 10, max = 50, message = "Description should be between 20 and 50 characters")
   private String description;
 
-  private boolean completed;
+  private Boolean completed;
 
 }

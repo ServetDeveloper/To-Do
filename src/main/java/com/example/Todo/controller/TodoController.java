@@ -4,19 +4,20 @@ import com.example.Todo.model.Todo;
 import com.example.Todo.service.TodoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class TodoController {
 
+  @Autowired
   private final TodoService todoService;
 
   @GetMapping("/todos")
@@ -44,21 +45,18 @@ public class TodoController {
     return "redirect:/todos";
   }
 
-  @PostMapping("/todos/update-list")
-  public String updateTodoList(@ModelAttribute("todos") List<Todo> todos) {
-
-    for (Todo updatedTodo : todos) {
-
-      Todo existingTodo = todoService.findById(updatedTodo.getId())
-        .orElse(null);
-
-      if (existingTodo != null) {
-        existingTodo.setCompleted(updatedTodo.isCompleted());
-        todoService.save(existingTodo);
+  @PostMapping("/todos/update/{id}")
+  public String updateTodo(@PathVariable Long id, @RequestParam("completed") Boolean completed) {
+    try {
+      if (id == null || id < 1) {
+        throw new IllegalArgumentException("Invalid todo id");
       }
+      todoService.updateTodo(id, completed);
+      return "redirect:/todos";
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+      return "redirect:/todos";
     }
-
-    return "redirect:/todos";
   }
 
 }
