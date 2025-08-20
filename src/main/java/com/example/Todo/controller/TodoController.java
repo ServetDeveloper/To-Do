@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -37,27 +38,27 @@ public class TodoController {
     return "redirect:/todos";
   }
 
-  @PostMapping("/todos/{id}")
+  @PostMapping("/todos/delete/{id}")
   public String deleteTodo (@PathVariable Long id) {
     todoService.deleteTodoById(id);
     return "redirect:/todos";
   }
 
-  @PostMapping("update/{id}")
-  public String updateTodo (@PathVariable Long id, @ModelAttribute("todo") Todo todo) {
+  @PostMapping("/todos/update-list")
+  public String updateTodoList(@ModelAttribute("todos") List<Todo> todos) {
 
-    todoService.updateTodo(id, todo);
+    for (Todo updatedTodo : todos) {
+
+      Todo existingTodo = todoService.findById(updatedTodo.getId())
+        .orElse(null);
+
+      if (existingTodo != null) {
+        existingTodo.setCompleted(updatedTodo.isCompleted());
+        todoService.save(existingTodo);
+      }
+    }
 
     return "redirect:/todos";
-  }
-
-  @GetMapping("edit/{id}")
-  public String showUpdateForm (@PathVariable Long id, Model model) {
-    Todo todo = todoService.findById(id)
-        .orElseThrow( () -> new IllegalArgumentException("Invalid todo id: " + id));
-
-    model.addAttribute("todo", todo);
-    return "todos";
   }
 
 }

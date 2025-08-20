@@ -3,6 +3,7 @@ package com.example.Todo.service;
 import com.example.Todo.model.Todo;
 import com.example.Todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TodoService {
 
+  @Autowired
   private final TodoRepository todoRepository;
 
   public List<Todo> getAllTodos () {
@@ -32,16 +34,7 @@ public class TodoService {
     todoRepository.deleteById(id);
   }
 
-  public void updateTodo (@PathVariable Long id, @ModelAttribute("todo") Todo todo) {
-
-    Todo existingTodo = todoRepository.findById(id)
-      .orElseThrow(() -> new IllegalArgumentException("Invalid todo id: " + id));
-
-    existingTodo.setTitle(todo.getTitle());
-    existingTodo.setDescription(todo.getDescription());
-    existingTodo.setCompleted(todo.isCompleted());
-
-    todoRepository.save(existingTodo);
-
+  public void save (Todo todo) {
+    todoRepository.save(todo);
   }
 }
