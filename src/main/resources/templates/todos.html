@@ -5,16 +5,11 @@
     <title>Todo List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <style>
-        th, td {
-          border: 1px solid #333;
-          padding: 8px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
 <body>
 
-<h1>Add Todo</h1>
+<h1 class="add">Add Todo</h1>
 
 <form th:action="@{/todos}" th:object="${todo}" method="post">
     <label for="title">Title:</label><br />
